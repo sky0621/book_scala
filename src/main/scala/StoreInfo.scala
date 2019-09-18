@@ -1,4 +1,4 @@
-class StoreInfo(val storeName: String = "store.json")
+class StoreInfo private(val storeName: String = "store.json")
 
 // コンパニオンオブジェクト（StoreInfoクラスのコンストラクタを隠蔽するファクトリ）
 object StoreInfo {

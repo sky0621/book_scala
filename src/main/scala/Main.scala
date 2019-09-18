@@ -13,16 +13,11 @@ object Main extends App {
       |
       |""".stripMargin)
 
-  val si = StoreInfo("store.json")
-  println(si.storeName)
-
-  // -------------------------------------------------------------------
-  // ここからメイン処理
-  // -------------------------------------------------------------------
-
   import scala.collection.mutable
 
   var cmdStore = mutable.Map.empty[String, String]
+
+  val commands = Commands(StoreInfo("store.json"))
 
   println("Start!")
   while (true) {
@@ -30,13 +25,12 @@ object Main extends App {
 
     // アプリ終了判定
     if (cmds(0) == "end") {
-      println("End!")
-      sys.exit(-1)
+      commands.exec(cmds)
     }
 
     // ヘルプ
     if (cmds(0) == "help") {
-      usage()
+      commands.exec(cmds)
     }
 
     if (cmds(0) == "") {
