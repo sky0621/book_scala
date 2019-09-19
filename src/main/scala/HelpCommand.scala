@@ -1,4 +1,5 @@
-class HelpCommand extends Command {
+// privateにすることで new による生成を抑止
+class HelpCommand private extends Command {
   override def exec(args: Array[String]): Unit = println(
     """
       |[usage]
@@ -14,4 +15,9 @@ class HelpCommand extends Command {
       |end    ... アプリを終了します。
       |
       |""".stripMargin)
+}
+
+// コンパニオンオブジェクト（HelpCommandクラスのコンストラクタを隠蔽するファクトリ）
+object HelpCommand {
+  def apply(): Command = new HelpCommand()
 }

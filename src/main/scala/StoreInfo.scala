@@ -1,3 +1,4 @@
+// privateにすることで new による生成を抑止
 class StoreInfo private(val storeName: String = "store.json")
 
 // コンパニオンオブジェクト（StoreInfoクラスのコンストラクタを隠蔽するファクトリ）
