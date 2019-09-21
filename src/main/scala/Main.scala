@@ -1,4 +1,9 @@
 object Main extends App {
+  val commands = Commands(StoreInfo("store.json"))
+
+  import scala.collection.mutable
+  var cmdStore = mutable.Map.empty[String, String]
+
   def usage(): Unit = println(
     """
       |[usage]
@@ -13,48 +18,12 @@ object Main extends App {
       |
       |""".stripMargin)
 
-  import scala.collection.mutable
-
-  var cmdStore = mutable.Map.empty[String, String]
-
-  val commands = Commands(StoreInfo("store.json"))
-
   println("Start!")
   while (true) {
     val cmds = io.StdIn.readLine().split(" ")
 
-    // アプリ終了判定
-    if (cmds(0) == "end") {
+    if (cmds(0) == "end" || cmds(0) == "help" || cmds(0) == "clear" || cmds(0) == "save" || cmds(0) == "get") {
       commands.exec(cmds)
-    }
-
-    // ヘルプ
-    if (cmds(0) == "help") {
-      commands.exec(cmds)
-    }
-
-    if (cmds(0) == "") {
-      usage()
-    }
-
-    // 保存
-    if (cmds(0) == "save") {
-      if (cmds.size != 3) {
-        usage()
-      } else {
-        cmdStore += (cmds(1) -> cmds(2))
-      }
-    }
-
-    // 取得
-    if (cmds(0) == "get") {
-      if (cmds.size != 2) {
-        usage()
-      } else {
-        if (cmdStore.contains(cmds(1))) {
-          println(cmdStore(cmds(1)))
-        }
-      }
     }
 
     // 削除

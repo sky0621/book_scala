@@ -1,13 +1,12 @@
-import java.io.IOException
-import java.nio.file.{Files, Paths}
+import scala.util.{Failure, Success}
 
 // privateにすることで new による生成を抑止
-class ClearCommand private(storeInfo: StoreInfo) extends Command {
-  override def exec(args: Array[String]): Unit = {
-    try {
-      Files.write(Paths.get(storeInfo.storeName), "{}".getBytes())
-    } catch {
-      case e: IOException => println(e.getMessage)
+class ClearCommand private(storeInfo: StoreInfo) extends Command with Helper {
+  override def exec(args: String*): Unit = {
+    // Helperトレイトに持たせたJSONファイルへの書き込みロジックを使用
+    writeJson(storeInfo.storeName, Map[String, String]()) match {
+      case Success(_) =>
+      case Failure(e) => println(e.getMessage)
     }
   }
 }

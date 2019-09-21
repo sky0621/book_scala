@@ -1,4 +1,3 @@
-import java.io.PrintWriter
 import java.nio.file.{Files, Paths}
 
 // privateにすることで new による生成を抑止
@@ -8,27 +7,25 @@ class Commands private(commands: Map[String, Command]) {
       print("no target")
       return
     }
-    val cmdName = cmds.head
-    val cmdArgs = cmds.tail
-    commands(cmdName).exec(cmdArgs)
+    commands(cmds.head).exec(cmds.tail: _*) // 可変長引数の定義に対して Array<String> を渡す際は _* を使う
   }
 }
 
 // コンパニオンオブジェクト（Commandsクラスのコンストラクタを隠蔽するファクトリ）
 object Commands {
   def apply(storeInfo: StoreInfo): Commands = {
-    val store = Paths.get(storeInfo.storeName)
-    if (Files.notExists(store)) {
-      try(Files.createFile(store))
-      val pw = new PrintWriter(storeInfo.storeName)
-      pw.write("{}")
-      pw.close()
+    if (Files.notExists(Paths.get(storeInfo.storeName))) {
+      ClearCommand(storeInfo).exec(null)
     }
 
-    new Commands(Map(
-      "end" -> EndCommand(),
-      "help" -> HelpCommand(),
-      "clear" -> ClearCommand(storeInfo),
-    ))
+    new Commands(
+      Map(
+        "end" -> EndCommand(),
+        "help" -> HelpCommand(),
+        "clear" -> ClearCommand(storeInfo),
+        "save" -> SaveCommand(storeInfo),
+        "get" -> GetCommand(storeInfo)
+      )
+    )
   }
 }

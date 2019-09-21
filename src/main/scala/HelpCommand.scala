@@ -1,6 +1,6 @@
 // privateにすることで new による生成を抑止
 class HelpCommand private extends Command {
-  override def exec(args: Array[String]): Unit = println(
+  override def exec(args: String*): Unit = println(
     """
       |[usage]
       |キーバリュー形式で文字列情報を管理するコマンドです。
