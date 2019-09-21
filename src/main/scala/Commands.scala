@@ -3,11 +3,11 @@ import java.nio.file.{Files, Paths}
 // privateにすることで new による生成を抑止
 class Commands private(commands: Map[String, Command]) {
   def exec(cmds: Array[String]): Unit = {
-    if (cmds == null || cmds.length < 1) {
-      print("no target")
-      return
+    if (commands.contains(cmds.head)) {
+      commands(cmds.head).exec(cmds.tail: _*) // 可変長引数の定義に対して Array<String> を渡す際は _* を使う
+    } else {
+      commands("help").exec(null)
     }
-    commands(cmds.head).exec(cmds.tail: _*) // 可変長引数の定義に対して Array<String> を渡す際は _* を使う
   }
 }
 
@@ -24,7 +24,9 @@ object Commands {
         "help" -> HelpCommand(),
         "clear" -> ClearCommand(storeInfo),
         "save" -> SaveCommand(storeInfo),
-        "get" -> GetCommand(storeInfo)
+        "get" -> GetCommand(storeInfo),
+        "remove" -> RemoveCommand(storeInfo),
+        "list" -> ListCommand(storeInfo)
       )
     )
   }
